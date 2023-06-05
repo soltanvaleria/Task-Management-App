@@ -1,5 +1,6 @@
 package com.example.task_management.services;
 
+import com.example.task_management.domain.entities.SubTaskEty;
 import com.example.task_management.domain.entities.TaskEty;
 import com.example.task_management.domain.enums.TaskPriority;
 import com.example.task_management.domain.repository.SubTaskRepository;
@@ -12,7 +13,9 @@ import com.example.task_management.models.filter.DeadlineFilterStrategy;
 import com.example.task_management.models.filter.FilterStrategy;
 import com.example.task_management.models.filter.TypeFilterStrategy;
 import com.example.task_management.models.requests.FilterSubTaskRequest;
+import com.example.task_management.models.requests.SubTaskRequestDto;
 import com.example.task_management.models.requests.TaskRequestDto;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -54,7 +57,12 @@ public class TaskService {
     }
 
     private Task mapTaskEtyToTaskResponse(TaskEty taskEty) {
-        List<TaskComponent> subTaskList = taskEty.getSubtaskList().stream()
+        var subTaskDefaultIterator = taskEty.getDefaultSubtaskIterator();
+        List<SubTaskEty> subTaskEtyList = new ArrayList<>();
+        while (subTaskDefaultIterator.hasNext()) {
+            subTaskEtyList.add(subTaskDefaultIterator.getNext());
+        }
+        List<TaskComponent> subTaskList = subTaskEtyList.stream()
                 .map(entity -> (TaskComponent) SubTask.builder()
                         .id(entity.getId())
                         .title(entity.getTitle())
@@ -80,6 +88,16 @@ public class TaskService {
         return task;
     }
 
+    private SubTask mapSubTaskEtyToSubTaskResponse(SubTaskEty subTaskEty) {
+        return SubTask.builder()
+            .id(subTaskEty.getId())
+            .title(subTaskEty.getTitle())
+            .description(subTaskEty.getDescription())
+            .type(subTaskEty.getTaskType())
+            .deadline(subTaskEty.getDeadline())
+            .build();
+    }
+
     public List<SubTask> getFilteredSubTaskList(FilterSubTaskRequest request) {
         FilterStrategy filterStrategy;
         if (request.getDeadline() != null){
@@ -91,5 +109,29 @@ public class TaskService {
         }
 
         return filterStrategy.getFilteredList();
+    }
+
+
+    public List<SubTask> getSubtaskByDeadline(Integer taskId) {
+        var taskEty = taskRepository.findById(taskId).orElseThrow();
+        var subTaskIterator = taskEty.getDeadlineSubtaskIterator();
+        List<SubTask> subTaskList = new ArrayList<>();
+        while (subTaskIterator.hasNext()){
+            subTaskList.add(mapSubTaskEtyToSubTaskResponse(subTaskIterator.getNext()));
+        }
+        return subTaskList;
+    }
+
+    public void addSubTask(SubTaskRequestDto request) {
+        var taskEty = taskRepository.findById(request.getTaskId())
+            .orElseThrow();
+        SubTaskEty subTaskEty = SubTaskEty.builder()
+            .title(request.getTitle())
+            .description(request.getDescription())
+            .taskType(request.getType())
+            .deadline(request.getDeadline())
+            .task(taskEty)
+            .build();
+        subTaskRepository.save(subTaskEty);
     }
 }
