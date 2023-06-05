@@ -10,6 +10,7 @@ import com.example.task_management.models.requests.TaskRequestDto;
 import com.example.task_management.services.TaskService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -73,5 +74,16 @@ public class TaskController {
   @ResponseStatus(HttpStatus.OK)
   public void completeSubTask(@PathVariable Integer subTaskId){
     taskService.completeSubTask(subTaskId);
+  }
+  @DeleteMapping("{taskId}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void deleteTask(@PathVariable Integer taskId) {
+    taskService.deleteTask(taskId);
+  }
+
+  @DeleteMapping("subtasks/{subTaskId}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void deleteSubTask(@PathVariable Integer subTaskId) {
+    taskService.deleteSubTask(subTaskId);
   }
 }

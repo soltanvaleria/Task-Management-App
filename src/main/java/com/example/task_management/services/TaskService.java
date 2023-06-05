@@ -163,5 +163,21 @@ public class TaskService {
         subTaskEty.setIsDone(true);
         subTaskRepository.save(subTaskEty);
     }
+
+    public void deleteTask(Integer taskId) {
+        if (taskRepository.existsById(taskId)) {
+            taskRepository.deleteById(taskId);
+        } else {
+            throw new IllegalArgumentException(String.format("Task with id: %d does not exists", taskId));
+        }
+    }
+
+    public void deleteSubTask(Integer subTaskId) {
+        if (subTaskRepository.existsById(subTaskId)) {
+            subTaskRepository.deleteById(subTaskId);
+        } else {
+            throw new IllegalArgumentException(String.format("Task with id: %d does not exists", subTaskId));
+        }
+    }
 }
 
