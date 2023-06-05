@@ -3,7 +3,7 @@ package com.example.task_management.models.decorator;
 
 import com.example.task_management.domain.enums.TaskPriority;
 
-public class TaskDecorator implements Priority{
+abstract public class TaskDecorator implements Priority{
 
     private Priority priority;
 

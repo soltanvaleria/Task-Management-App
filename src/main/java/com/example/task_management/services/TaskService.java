@@ -2,12 +2,18 @@ package com.example.task_management.services;
 
 import com.example.task_management.domain.entities.TaskEty;
 import com.example.task_management.domain.enums.TaskPriority;
+import com.example.task_management.domain.repository.SubTaskRepository;
 import com.example.task_management.domain.repository.TaskRepository;
 import com.example.task_management.models.composite.SubTask;
 import com.example.task_management.models.composite.Task;
 import com.example.task_management.models.composite.TaskComponent;
 import com.example.task_management.models.decorator.PriorityTaskDecorator;
+import com.example.task_management.models.filter.DeadlineFilterStrategy;
+import com.example.task_management.models.filter.FilterStrategy;
+import com.example.task_management.models.filter.TypeFilterStrategy;
+import com.example.task_management.models.requests.FilterSubTaskRequest;
 import com.example.task_management.models.requests.TaskRequestDto;
+import java.util.Collections;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +23,16 @@ public class TaskService {
     private static TaskService INSTANCE;
 
     private static TaskRepository taskRepository;
+    public static SubTaskRepository subTaskRepository;
 
-    public static TaskService getInstance(TaskRepository repository) {
+    private TaskService() {
+    }
+
+    public static TaskService getInstance(TaskRepository repository, SubTaskRepository subTaskRepository) {
         if (INSTANCE == null) {
             INSTANCE = new TaskService();
             taskRepository = repository;
+            subTaskRepository = subTaskRepository;
         }
         return INSTANCE;
     }
@@ -67,5 +78,18 @@ public class TaskService {
         }
 
         return task;
+    }
+
+    public List<SubTask> getFilteredSubTaskList(FilterSubTaskRequest request) {
+        FilterStrategy filterStrategy;
+        if (request.getDeadline() != null){
+            filterStrategy = new DeadlineFilterStrategy(subTaskRepository, request.getDeadline());
+        }else if (request.getTaskType() != null){
+            filterStrategy = new TypeFilterStrategy(subTaskRepository, request.getTaskType());
+        } else {
+            return Collections.emptyList();
+        }
+
+        return filterStrategy.getFilteredList();
     }
 }
