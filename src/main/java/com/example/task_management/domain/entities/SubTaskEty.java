@@ -47,4 +47,6 @@ public class SubTaskEty {
   @JoinColumn(name = "task_id", referencedColumnName = "task_id")
   private TaskEty task;
 
+  @Column(name = "is_done")
+  private Boolean isDone;
 }

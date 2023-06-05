@@ -21,6 +21,7 @@ public class SubTask implements TaskComponent {
     private TaskType type;
 
     private LocalDateTime deadline;
+    private boolean isDone;
 
     @Override
     public int getId() {

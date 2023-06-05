@@ -6,5 +6,6 @@ CREATE TABLE subtasks
     subtask_type        VARCHAR(50)  NOT NULL,
     subtask_deadline    TIMESTAMP,
     task_id             INT          NOT NULL,
+    is_done             BOOLEAN      NOT NULL,
     CONSTRAINT fk_task FOREIGN KEY (task_id) REFERENCES tasks (task_id)
 );
