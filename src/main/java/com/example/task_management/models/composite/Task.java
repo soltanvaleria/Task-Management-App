@@ -1,7 +1,7 @@
 package com.example.task_management.models.composite;
 import com.example.task_management.domain.enums.TaskPriority;
 import com.example.task_management.models.Prototype;
-import com.example.task_management.models.decorator.Priority;
+import com.example.task_management.models.decorator.TaskDecoratorComponent;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +12,7 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class Task implements TaskComponent, Priority, Prototype<Task> {
+public class Task implements TaskComponent, TaskDecoratorComponent, Prototype<Task> {
 
     private Integer id;
 
@@ -49,7 +49,7 @@ public class Task implements TaskComponent, Priority, Prototype<Task> {
 
     @Override
     public void setPriority(TaskPriority taskPriority) {
-        this.taskPriority = taskPriority;
+        this.taskPriority = TaskPriority.NULL;
     }
 
     @Override

@@ -3,16 +3,16 @@ package com.example.task_management.models.decorator;
 
 import com.example.task_management.domain.enums.TaskPriority;
 
-abstract public class TaskDecorator implements Priority{
+abstract public class TaskDecorator implements TaskDecoratorComponent {
 
-    private Priority priority;
+    private TaskDecoratorComponent taskDecoratorComponent;
 
-    public TaskDecorator(Priority priority) {
-        this.priority = priority;
+    public TaskDecorator(TaskDecoratorComponent taskDecoratorComponent) {
+        this.taskDecoratorComponent = taskDecoratorComponent;
     }
 
     @Override
     public void setPriority(TaskPriority taskPriority) {
-        this.priority.setPriority(taskPriority);
+        this.taskDecoratorComponent.setPriority(taskPriority);
     }
 }

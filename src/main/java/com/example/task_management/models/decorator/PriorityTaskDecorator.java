@@ -5,8 +5,8 @@ import com.example.task_management.domain.enums.TaskPriority;
 
 public class PriorityTaskDecorator extends TaskDecorator{
 
-    public PriorityTaskDecorator(Priority priority) {
-        super(priority);
+    public PriorityTaskDecorator(TaskDecoratorComponent taskDecoratorComponent) {
+        super(taskDecoratorComponent);
     }
 
     @Override

@@ -30,6 +30,9 @@ public class TaskService {
 
     private static SubTaskRepository subTaskRepository;
 
+    private TaskService() {
+    }
+
     public static TaskService getInstance(TaskRepository repository, SubTaskRepository subTaskRepo) {
         if (INSTANCE == null) {
             INSTANCE = new TaskService();
