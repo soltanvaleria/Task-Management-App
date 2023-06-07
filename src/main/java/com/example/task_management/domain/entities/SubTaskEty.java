@@ -1,5 +1,6 @@
 package com.example.task_management.domain.entities;
 import com.example.task_management.domain.enums.TaskType;
+import com.example.task_management.models.Prototype;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -23,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SubTaskEty {
+public class SubTaskEty implements Prototype<SubTaskEty> {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,4 +50,15 @@ public class SubTaskEty {
 
   @Column(name = "is_done")
   private Boolean isDone;
+
+  @Override
+  public SubTaskEty clone() {
+    return SubTaskEty.builder()
+        .title(title)
+        .description(description)
+        .deadline(deadline)
+        .isDone(isDone)
+        .taskType(taskType)
+        .build();
+  }
 }

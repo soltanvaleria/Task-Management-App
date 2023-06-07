@@ -17,8 +17,9 @@ public class TypeFilterStrategy implements FilterStrategy{
   }
 
   @Override
-  public List<SubTask> getFilteredList() {
+  public List<SubTask> getFilteredList(Integer taskId) {
     return repository.findAllByTaskType(type).stream()
+        .filter(entity -> entity.getTask().getId().equals(taskId))
         .map(this::mapSubTaskEtyToDto)
         .toList();
   }
@@ -29,6 +30,7 @@ public class TypeFilterStrategy implements FilterStrategy{
         .title(entity.getTitle())
         .description(entity.getDescription())
         .deadline(entity.getDeadline())
+        .type(entity.getTaskType())
         .build();
   }
 }

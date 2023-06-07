@@ -38,14 +38,25 @@ public class TaskController {
     taskService.createTask(request);
   }
 
+  @PostMapping("/{taskId}")
+  @ResponseStatus(HttpStatus.CREATED)
+  public void cloneTask(@PathVariable Integer taskId){
+    taskService.cloneTask(taskId);
+  }
+
+  @GetMapping("/{taskId}")
+  public List<SubTask> getTaskById(@PathVariable Integer taskId){
+    return taskService.getSubTaskById(taskId);
+  }
+
   @GetMapping
   public List<Task> getAllTasks(){
     return taskService.getAllTasks();
   }
 
-  @GetMapping("/subtasks")
-  public List<SubTask> getFilteredSubTasks(@RequestBody @Valid FilterSubTaskRequest request){
-    return taskService.getFilteredSubTaskList(request);
+  @PostMapping("/subtasks/filters/{taskId}")
+  public List<SubTask> getFilteredSubTasks(@RequestBody @Valid FilterSubTaskRequest request, @PathVariable Integer taskId){
+    return taskService.getFilteredSubTaskList(request, taskId);
   }
 
   @GetMapping("/subtasks/{taskId}")

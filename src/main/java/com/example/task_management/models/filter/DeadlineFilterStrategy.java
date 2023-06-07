@@ -17,8 +17,9 @@ public class DeadlineFilterStrategy implements FilterStrategy{
   }
 
   @Override
-  public List<SubTask> getFilteredList() {
+  public List<SubTask> getFilteredList(Integer taskId) {
     return repository.findAll().stream()
+        .filter(entity -> entity.getTask().getId().equals(taskId))
         .filter(entity -> entity.getDeadline().isBefore(deadline) || entity.getDeadline().isEqual(deadline))
         .map(this::mapSubTaskEtyToDto)
         .toList();
@@ -30,6 +31,7 @@ public class DeadlineFilterStrategy implements FilterStrategy{
         .title(entity.getTitle())
         .description(entity.getDescription())
         .deadline(entity.getDeadline())
+        .type(entity.getTaskType())
         .build();
   }
 }

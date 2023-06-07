@@ -5,6 +5,7 @@ import com.example.task_management.domain.iterator.SubtaskCollection;
 import com.example.task_management.domain.iterator.SubtaskDeadlineIterator;
 import com.example.task_management.domain.iterator.SubtaskDefaultIterator;
 import com.example.task_management.domain.iterator.SubtaskIterator;
+import com.example.task_management.models.Prototype;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -27,7 +29,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-public class TaskEty implements SubtaskCollection {
+public class TaskEty implements SubtaskCollection, Prototype<TaskEty> {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,5 +63,15 @@ public class TaskEty implements SubtaskCollection {
   @Override
   public SubtaskIterator getDeadlineSubtaskIterator() {
     return new SubtaskDeadlineIterator(this.subtaskList);
+  }
+
+  @Override
+  public TaskEty clone() {
+    return TaskEty.builder()
+        .title(title)
+        .description(description)
+        .priority(priority)
+        .subtaskList(List.copyOf(subtaskList))
+        .build();
   }
 }

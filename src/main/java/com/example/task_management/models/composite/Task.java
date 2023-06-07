@@ -24,6 +24,9 @@ public class Task implements TaskComponent, TaskDecoratorComponent, Prototype<Ta
 
     private List<TaskComponent> subtaskList;
 
+    private int completedSubtasks;
+    private int remainSubtasks;
+
     public void addSubTask(TaskComponent component) {
         subtaskList.add(component);
     }
@@ -49,7 +52,7 @@ public class Task implements TaskComponent, TaskDecoratorComponent, Prototype<Ta
 
     @Override
     public void setPriority(TaskPriority taskPriority) {
-        this.taskPriority = TaskPriority.NULL;
+        this.taskPriority = taskPriority;
     }
 
     @Override
